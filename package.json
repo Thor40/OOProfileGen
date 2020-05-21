@@ -1,0 +1,28 @@
+{
+  "name": "ooprofilegen",
+  "version": "1.0.0",
+  "description": "generates profile html",
+  "main": "Index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thor40/OOProfileGen.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Thor40/OOProfileGen/issues"
+  },
+  "homepage": "https://github.com/Thor40/OOProfileGen#readme",
+  "devDependencies": {
+    "jest": "^26.0.1"
+  },
+  "dependencies": {
+    "inquirer": "^7.1.0"
+  }
+}
