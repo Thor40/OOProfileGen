@@ -1,4 +1,5 @@
 const inquirer = require('inquirer');
+const Manager = require('./lib/Manager')
 
 function Role() {
     this.roleM = [];
@@ -7,16 +8,16 @@ function Role() {
     this.intern;
 }
 
-Role.prototype.getRole = function() {
-    // console.log(`Please fill out the following prompt to build your team!`);
+Role.prototype.getRole = function(manager) {
+    console.log(`Please fill out the following prompt to build your team!`);
     inquirer
         .prompt([
         {
         type: 'input',
-        name: 'manager',
+        name: 'name',
         message: 'What is your team managers name? (Required)',
-            validate: manager => {
-                if (manager) {
+            validate: name => {
+                if (name) {
                     return true;
                 } else {
                     console.log('Please enter your name!');
@@ -25,11 +26,24 @@ Role.prototype.getRole = function() {
             }
         },
         {
+            type: 'input',
+            name: 'id',
+            message: 'What is your team managers id number? (Required)',
+                validate: id => {
+                    if (id) {
+                        return true;
+                    } else {
+                        console.log('Please enter a valid ID!');
+                        return false
+                    }
+                }
+            },
+        {
         type: 'input',
-        name: 'managerEmail',
+        name: 'email',
         message: 'What is your team managers email? (Required)',
-            validate: managerEmail => {
-                if (managerEmail) {
+            validate: email => {
+                if (email) {
                     return true;
                 } else {
                     console.log('Please enter the email!');
@@ -39,10 +53,10 @@ Role.prototype.getRole = function() {
         },
         {
         type: 'input',
-        name: 'managerOfficeNumber',
+        name: 'officeNumber',
         message: 'What is your team managers office number? (Required)',
-            validate: managerOfficeNumber => {
-                if (managerOfficeNumber) {
+            validate: officeNumber => {
+                if (officeNumber) {
                     return true;
                 } else {
                     console.log('Please enter the office number!');
@@ -51,9 +65,13 @@ Role.prototype.getRole = function() {
             }
         }
         ])
-        // .then(({name}) => {
-        //     this.name = new Manager(name);
-        // });
+        .then(managerData => {
+            const pageManager = getName(managerData); 
+    
+            console.log(`${managerData.name}`);
+        });
 };
 
-new Role().getRole();
+module.exports = Role;
+
+new Role().getRole()
