@@ -8,10 +8,23 @@ function Role() {
     this.intern;
 }
 
-Role.prototype.getRole = function(manager) {
+Role.prototype.getRole = function() {
     console.log(`Please fill out the following prompt to build your team!`);
     inquirer
         .prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'What is your team title? (Required)',
+                validate: title => {
+                    if (title) {
+                        return true;
+                    } else {
+                        console.log('Please enter your team title!');
+                        return false
+                    }
+                }
+        },
         {
         type: 'input',
         name: 'name',
@@ -66,9 +79,9 @@ Role.prototype.getRole = function(manager) {
         }
         ])
         .then(managerData => {
-            const pageManager = getName(managerData); 
+            const template = template(managerData); 
     
-            console.log(`${managerData.name}`);
+            console.log(managerData);
         });
 };
 
