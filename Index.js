@@ -3,16 +3,13 @@ const fs = require('fs');
 const Manager = require('./lib/Manager')
 const Engineer = require('./lib/Engineer');
 
-function Role() {
-    this.tData = [];
-    this.engineer;
-    this.intern;
-}
+let manager;
+let employee;
+let tData = [];
 
-Role.prototype.getManager = function() {
+getManager = () => {
     console.log(`Please fill out the following prompt to build your team!`);
-    inquirer
-        .prompt([
+    return inquirer.prompt([
         {
             type: 'input',
             name: 'title',
@@ -78,78 +75,126 @@ Role.prototype.getManager = function() {
                     }
                 }
         }
-    ]);
+    ])
+    .then((result) => {
+        let $manager = new Manager(result.nameM, result.idM, result.emailM, result.officeNumberM)
+        manager = $manager
+        console.log(manager)
+        getRole();
+    })
 };
 
-Role.prototype.getRole = function(tData) {
-    if (!tData) {
-        tData = [];
-    }
-    console.log(`
-    =================
-    ${this.name} added
-    =================
-    `);
+const getRole = tData => {
     return inquirer.prompt([
         {
-            type: 'list',
+            type: 'confirm',
             name: 'confirmAdd',
             message: 'Would you like to add addition team members?',
-            choices: ['Engineer', 'Intern', 'Done']
+            default: true
         }
-    ]).then(rData => {
-        tData.role.push(rData);
-        if(rData.confirmAdd.choices[0]) {
-            return getEngineer(tData);}
-        // } else if(rData.confirmAdd[1]) {
-        //     return getInt(tData);}
+    ])
+    .then(rData => {
+        if(rData.confirmAdd) {
+            return getMember(tData);}
          else {
             return tData;
         }
     });
 };
 
-Role.prototype.getEngineer = function() {
-    inquirer
-        .prompt([
+const getMember = tData => {
+    // if (!tData.employees) {
+    //     tData.employees = [];
+    // }
+    // console.log(`
+    // ================
+    //  Employee added
+    // ================
+    // `);
+    return inquirer.prompt([
         {
             type: 'input',
-            name: 'title',
-            message: 'What is your team title?',
-                validate: title => {
-                    if (title) {
+            name: 'name',
+            message: `What is your employee's name?`,
+                validate: name => {
+                    if (name) {
                         return true;
                     } else {
-                        console.log('Please enter your team title!');
+                        console.log('Please enter your name!');
                         return false
                     }
                 }
         },
         {
             type: 'input',
-            name: 'nameE',
-            message: 'What is your engineers name?',
-                validate: nameE => {
-                    if (nameE) {
+            name: 'id',
+            message: `What is your employee's id number?`,
+                validate: idM => {
+                    if (idM) {
                         return true;
                     } else {
-                        console.log('Please enter a name!');
+                        console.log('Please enter a valid ID!');
                         return false
                     }
-                },
-            when: ({ confirmAdd }) => confirmAdd.choices.Engineer
+                }
+            },
+        {
+            type: 'input',
+            name: 'email',
+            message: `What is your employee's email?`,
+                validate: emailM => {
+                    if (emailM) {
+                        return true;
+                    } else {
+                        console.log('Please enter the email!');
+                        return false
+                    }
+                }
         },
-        ])
-        .then(promptData => {
-            // const template = template(promptData); 
-    
-            console.log(promptData);
-        });
+        {
+            type: 'confirm',
+            name: 'confirmGH',
+            message: 'Would you like to add a gitHub Username?',
+            default: true
+        },
+        {
+            type: 'input',
+            name: 'gitHub',
+            message: 'Provide employee GitHub Username',
+            when: ({ confirmGH }) => confirmGH
+        },
+        {
+            type: 'confirm',
+            name: 'confirmSch',
+            message: 'Would you like to add a school? (Intern)',
+            default: true
+        },
+        {
+            type: 'input',
+            name: 'gitHub',
+            message: 'Provide employee school',
+            when: ({ confirmSch }) => confirmSch
+        },
+        {
+            type: 'confirm',
+            name: 'confirmAdd',
+            message: 'Would you like to add addition team members?',
+            default: true
+        }
+    ])
+    .then((result) => {
+        let $employee = new Manager(result.name, result.id, result.email, result.officeNumber, result.school, result,github)
+        employee = $employee
+        console.log(employee)
+    .then(tData => {
+        if(tData.confirmAdd) {
+            return getMember(tData);}
+         else {
+            return tData;
+        }
+    });
+});
 };
-
-module.exports = Role;
-
-// new Role(getManager(nameM, idM, emailM, officeNumberM))
-getManager(new Role);
-    // .then(Role.getRole())
+getManager()
+    // .then(getRole)
     // .then(getEngineer(tData))
