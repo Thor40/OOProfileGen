@@ -1,18 +1,16 @@
 const inquirer = require('inquirer');
+const fs = require('fs');
 const Manager = require('./lib/Manager')
 const Engineer = require('./lib/Engineer');
 
 function Role() {
-    this.role = [];
+    this.tData = [];
     this.engineer;
     this.intern;
 }
 
-Role.prototype.buildTeam = function() {
-    console.log(`Please fill out the following prompt to build your team!`);
-};
-
 Role.prototype.getManager = function() {
+    console.log(`Please fill out the following prompt to build your team!`);
     inquirer
         .prompt([
         {
@@ -30,7 +28,7 @@ Role.prototype.getManager = function() {
         },
         {
             type: 'input',
-            name: 'name',
+            name: 'nameM',
             message: `What is your manager's name?`,
                 validate: name => {
                     if (name) {
@@ -84,15 +82,14 @@ Role.prototype.getManager = function() {
 };
 
 Role.prototype.getRole = function(tData) {
-    if (!tData.role) {
-        tData.role = [];
+    if (!tData) {
+        tData = [];
     }
     console.log(`
     =================
     ${this.name} added
     =================
-    `)
-};
+    `);
     return inquirer.prompt([
         {
             type: 'list',
@@ -102,14 +99,15 @@ Role.prototype.getRole = function(tData) {
         }
     ]).then(rData => {
         tData.role.push(rData);
-        if(rData.confirmAdd[0]) {
-            return getEng(tData);
-        } else if(rData.confirmAdd[1]) {
-            return getInt(tData);
-        } else {
+        if(rData.confirmAdd.choices[0]) {
+            return getEngineer(tData);}
+        // } else if(rData.confirmAdd[1]) {
+        //     return getInt(tData);}
+         else {
             return tData;
         }
     });
+};
 
 Role.prototype.getEngineer = function() {
     inquirer
@@ -151,4 +149,7 @@ Role.prototype.getEngineer = function() {
 
 module.exports = Role;
 
-new Role().getRole()
+// new Role(getManager(nameM, idM, emailM, officeNumberM))
+getManager(new Role);
+    // .then(Role.getRole())
+    // .then(getEngineer(tData))
