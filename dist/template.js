@@ -1,5 +1,5 @@
 
- funciton template(data) {
+ function template(data) {
     return `
 }
    <html lang="en">
