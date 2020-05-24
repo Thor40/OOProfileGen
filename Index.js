@@ -67,7 +67,6 @@ let getManager = () => {
             }
         }
     ]).then(a => {
-        // console.log("inquirer answer", a)
         let newManager = new Manager(a.name, a.id, a.email, a.officeNumber)
         roles.push(newManager)
         getRole();
@@ -89,8 +88,7 @@ const getRole = () => {
             getEng()
         } else if (role.confirmAdd === `Intern`) {
             getInt()
-        } else {
-            console.log('roles', roles) 
+        } else { 
             const pageHTML = generateHTML(roles)
             fs.writeFile('./index.html', pageHTML, err => {
                 if(err) throw new Error(err);
