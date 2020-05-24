@@ -12,20 +12,6 @@ let getManager = () => {
     return inquirer.prompt([
         {
             type: 'input',
-            name: 'title',
-            message: 'What is your team title?',
-            validate: title => {
-                if (title) {
-                    return true;
-                }
-                else {
-                    console.log('Please enter your team title!');
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'input',
             name: 'name',
             message: `What is your manager's name?`,
             validate: name => {
