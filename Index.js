@@ -4,9 +4,7 @@ const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 
-let manager;
-let employee;
-let tData = [];
+let roles = []
 
 getManager = async () => {
     console.log(`Please fill out the following prompt to build your team!`);
@@ -27,7 +25,7 @@ getManager = async () => {
         },
         {
             type: 'input',
-            name: 'nameM',
+            name: 'name',
             message: `What is your manager's name?`,
             validate: name_1 => {
                 if (name_1) {
@@ -41,7 +39,7 @@ getManager = async () => {
         },
         {
             type: 'input',
-            name: 'idM',
+            name: 'id',
             message: 'What is your team managers id number?',
             validate: idM_1 => {
                 if (idM_1) {
@@ -55,7 +53,7 @@ getManager = async () => {
         },
         {
             type: 'input',
-            name: 'emailM',
+            name: 'email',
             message: 'What is your team managers email?',
             validate: emailM_1 => {
                 if (emailM_1) {
@@ -69,7 +67,7 @@ getManager = async () => {
         },
         {
             type: 'input',
-            name: 'officeNumberM',
+            name: 'officeNumber',
             message: 'What is your team managers office number?',
             validate: officeNumberM_1 => {
                 if (officeNumberM_1) {
@@ -82,13 +80,15 @@ getManager = async () => {
             }
         }
     ]);
-    let $manager = new Manager(result.nameM, result.idM, result.emailM, result.officeNumberM);
+    let $manager = new Manager(result.name, result.id, result.email, result.officeNumber);
     manager = $manager;
-    console.log(manager);
+    roles.push(manager);
+    console.log(roles)
     getRole();
+
 };
 
-const getRole = role => {
+const getRole = () => {
     return inquirer.prompt([
         {
             type: 'list',
@@ -104,119 +104,128 @@ const getRole = role => {
         } else if (role.confirmAdd === `Intern`) {
             getInt()
         } else {
-            return role
+            console.log(roles)
+            generateHTML()
         }
     })
 };
 
-const getEng = () => {
-    return inquirer.prompt([
+const getEng = async () => {
+    const result = await inquirer.prompt([
         {
             type: 'input',
             name: 'name',
             message: `What is your engineers's name?`,
-                validate: name => {
-                    if (name) {
-                        return true;
-                    } else {
-                        console.log('Please enter your name!');
-                        return false
-                    }
+            validate: name_1 => {
+                if (name_1) {
+                    return true;
                 }
+                else {
+                    console.log('Please enter your name!');
+                    return false;
+                }
+            }
         },
         {
             type: 'input',
             name: 'id',
             message: `What is your engineers's id number?`,
-                validate: idM => {
-                    if (idM) {
-                        return true;
-                    } else {
-                        console.log('Please enter a valid ID!');
-                        return false
-                    }
+            validate: idM_1 => {
+                if (idM_1) {
+                    return true;
                 }
-            },
+                else {
+                    console.log('Please enter a valid ID!');
+                    return false;
+                }
+            }
+        },
         {
             type: 'input',
             name: 'email',
             message: `What is your engineers's email?`,
-                validate: emailM => {
-                    if (emailM) {
-                        return true;
-                    } else {
-                        console.log('Please enter the email!');
-                        return false
-                    }
+            validate: emailM_1 => {
+                if (emailM_1) {
+                    return true;
                 }
+                else {
+                    console.log('Please enter the email!');
+                    return false;
+                }
+            }
         },
         {
             type: 'input',
             name: 'gitHub',
             message: 'Provide employee GitHub Username',
         }
-    ])
-    .then((result) => {
-        let $engineer = new Engineer(result.name, result.id, result.email, result.gitHub)
-        engineer = $engineer
-        console.log(engineer)
-            getRole();
-    });
+    ]);
+    let $engineer = new Engineer(result.name, result.id, result.email, result.gitHub);
+    engineer = $engineer;
+    roles.push(engineer)
+    getRole();
+    return engineer
 };
 
-const getInt = () => {
-    return inquirer.prompt([
+const getInt = async () => {
+    const result = await inquirer.prompt([
         {
             type: 'input',
             name: 'name',
             message: `What is your Intern's name?`,
-                validate: name => {
-                    if (name) {
-                        return true;
-                    } else {
-                        console.log('Please enter your name!');
-                        return false
-                    }
+            validate: name_1 => {
+                if (name_1) {
+                    return true;
                 }
+                else {
+                    console.log('Please enter your name!');
+                    return false;
+                }
+            }
         },
         {
             type: 'input',
             name: 'id',
             message: `What is your Intern's id number?`,
-                validate: idM => {
-                    if (idM) {
-                        return true;
-                    } else {
-                        console.log('Please enter a valid ID!');
-                        return false
-                    }
+            validate: idM_1 => {
+                if (idM_1) {
+                    return true;
                 }
-            },
+                else {
+                    console.log('Please enter a valid ID!');
+                    return false;
+                }
+            }
+        },
         {
             type: 'input',
             name: 'email',
             message: `What is your Intern's email?`,
-                validate: emailM => {
-                    if (emailM) {
-                        return true;
-                    } else {
-                        console.log('Please enter the email!');
-                        return false
-                    }
+            validate: emailM_1 => {
+                if (emailM_1) {
+                    return true;
                 }
+                else {
+                    console.log('Please enter the email!');
+                    return false;
+                }
+            }
         },
         {
             type: 'input',
             name: 'school',
             message: `Provide Intern's school`,
         }
-    ])
-    .then((result) => {
-        let $intern = new Intern(result.name, result.id, result.email, result.school)
-        intern = $intern
-        console.log(intern)
-            getRole();
-    });
+    ]);
+    let $intern = new Intern(result.name, result.id, result.email, result.school);
+    intern = $intern;
+    roles.push(intern)
+    getRole();
+    return intern 
 };
+
+generateHTML = () => {
+    console.log(roles.Manager.map(x => x.name))
+}
 
 getManager();
