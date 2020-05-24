@@ -15,7 +15,7 @@ OOProfileGen is a team organizer that generates contact cards for everyone in yo
   ```
   call node index in command-line to run test
   ```
-  Video link example: [GoogleDrive Link to test video]()
+  Video link example: [GoogleDrive Link to test video](https://drive.google.com/file/d/1QyJ1Vsy_LOWSeY-KAs-7R8Pixr_1L0KH/view)
   
   ## This project is build with:
   
