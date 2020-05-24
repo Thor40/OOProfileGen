@@ -1,7 +1,8 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const Manager = require('./lib/Manager')
+const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
 let manager;
 let employee;
@@ -87,7 +88,7 @@ getManager = async () => {
     getRole();
 };
 
-const getRole = tData => {
+const getRole = role => {
     return inquirer.prompt([
         {
             type: 'list',
@@ -96,20 +97,19 @@ const getRole = tData => {
             choices: ['Engineer', 'Intern', 'Done'],
         }
     ])
-    .then(rData => {
-        // rData.confirmAdd.choices.map(index, item)
-        console.log(rData.confirmAdd)
-        if(rData.confirmAdd === 'Engineer') {
+    .then(role => {
+        console.log(role.confirmAdd)
+        if(role.confirmAdd === 'Engineer') {
             getEng()
-        } else if (rData.confirmAdd === `Intern`) {
+        } else if (role.confirmAdd === `Intern`) {
             getInt()
         } else {
-            return tData
+            return role
         }
     })
 };
 
-const getEng = tData => {
+const getEng = () => {
     return inquirer.prompt([
         {
             type: 'input',
@@ -164,7 +164,7 @@ const getEng = tData => {
     });
 };
 
-const getInt = tData => {
+const getInt = () => {
     return inquirer.prompt([
         {
             type: 'input',
@@ -208,7 +208,7 @@ const getInt = tData => {
         {
             type: 'input',
             name: 'school',
-            message: `Provide Intern's GitHub Username`,
+            message: `Provide Intern's school`,
         }
     ])
     .then((result) => {
@@ -219,4 +219,4 @@ const getInt = tData => {
     });
 };
 
-getManager()
+getManager();
