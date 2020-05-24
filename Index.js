@@ -3,18 +3,19 @@ const fs = require('fs');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
+const generateHTML = require('./dist/template.js')
 
 let roles = []
 
-getManager = async () => {
+let getManager = () => {
     console.log(`Please fill out the following prompt to build your team!`);
-    const result = await inquirer.prompt([
+    return inquirer.prompt([
         {
             type: 'input',
             name: 'title',
             message: 'What is your team title?',
-            validate: title_1 => {
-                if (title_1) {
+            validate: title => {
+                if (title) {
                     return true;
                 }
                 else {
@@ -27,8 +28,8 @@ getManager = async () => {
             type: 'input',
             name: 'name',
             message: `What is your manager's name?`,
-            validate: name_1 => {
-                if (name_1) {
+            validate: name => {
+                if (name) {
                     return true;
                 }
                 else {
@@ -41,8 +42,8 @@ getManager = async () => {
             type: 'input',
             name: 'id',
             message: 'What is your team managers id number?',
-            validate: idM_1 => {
-                if (idM_1) {
+            validate: id => {
+                if (id) {
                     return true;
                 }
                 else {
@@ -55,8 +56,8 @@ getManager = async () => {
             type: 'input',
             name: 'email',
             message: 'What is your team managers email?',
-            validate: emailM_1 => {
-                if (emailM_1) {
+            validate: email => {
+                if (email) {
                     return true;
                 }
                 else {
@@ -69,8 +70,8 @@ getManager = async () => {
             type: 'input',
             name: 'officeNumber',
             message: 'What is your team managers office number?',
-            validate: officeNumberM_1 => {
-                if (officeNumberM_1) {
+            validate: officeNumber => {
+                if (officeNumber) {
                     return true;
                 }
                 else {
@@ -79,12 +80,12 @@ getManager = async () => {
                 }
             }
         }
-    ]);
-    let $manager = new Manager(result.name, result.id, result.email, result.officeNumber);
-    manager = $manager;
-    roles.push(manager);
-    console.log(roles)
-    getRole();
+    ]).then(a => {
+        // console.log("inquirer answer", a)
+        let newManager = new Manager(a.name, a.id, a.email, a.officeNumber)
+        roles.push(newManager)
+        getRole();
+    });
 
 };
 
@@ -98,26 +99,29 @@ const getRole = () => {
         }
     ])
     .then(role => {
-        console.log(role.confirmAdd)
         if(role.confirmAdd === 'Engineer') {
             getEng()
         } else if (role.confirmAdd === `Intern`) {
             getInt()
         } else {
-            console.log(roles)
-            generateHTML()
+            console.log('roles', roles) 
+            const pageHTML = generateHTML(roles)
+            fs.writeFile('./index.html', pageHTML, err => {
+                if(err) throw new Error(err);
+            })
+        console.log("Check out the new HTML page!")
         }
     })
 };
 
-const getEng = async () => {
-    const result = await inquirer.prompt([
+ let getEng = () => {
+    return inquirer.prompt([
         {
             type: 'input',
             name: 'name',
             message: `What is your engineers's name?`,
-            validate: name_1 => {
-                if (name_1) {
+            validate: name => {
+                if (name) {
                     return true;
                 }
                 else {
@@ -130,8 +134,8 @@ const getEng = async () => {
             type: 'input',
             name: 'id',
             message: `What is your engineers's id number?`,
-            validate: idM_1 => {
-                if (idM_1) {
+            validate: id => {
+                if (id) {
                     return true;
                 }
                 else {
@@ -144,8 +148,8 @@ const getEng = async () => {
             type: 'input',
             name: 'email',
             message: `What is your engineers's email?`,
-            validate: emailM_1 => {
-                if (emailM_1) {
+            validate: email => {
+                if (email) {
                     return true;
                 }
                 else {
@@ -158,23 +162,22 @@ const getEng = async () => {
             type: 'input',
             name: 'gitHub',
             message: 'Provide employee GitHub Username',
-        }
-    ]);
-    let $engineer = new Engineer(result.name, result.id, result.email, result.gitHub);
-    engineer = $engineer;
-    roles.push(engineer)
-    getRole();
-    return engineer
+        },
+    ]).then(a => {
+        let newEngineer = new Engineer(a.name, a.id, a.email, a.gitHub)
+        roles.push(newEngineer)
+        getRole();
+    })
 };
 
-const getInt = async () => {
-    const result = await inquirer.prompt([
+let getInt = () => {
+    return inquirer.prompt([
         {
             type: 'input',
             name: 'name',
             message: `What is your Intern's name?`,
-            validate: name_1 => {
-                if (name_1) {
+            validate: name => {
+                if (name) {
                     return true;
                 }
                 else {
@@ -187,8 +190,8 @@ const getInt = async () => {
             type: 'input',
             name: 'id',
             message: `What is your Intern's id number?`,
-            validate: idM_1 => {
-                if (idM_1) {
+            validate: id => {
+                if (id) {
                     return true;
                 }
                 else {
@@ -201,8 +204,8 @@ const getInt = async () => {
             type: 'input',
             name: 'email',
             message: `What is your Intern's email?`,
-            validate: emailM_1 => {
-                if (emailM_1) {
+            validate: email => {
+                if (email) {
                     return true;
                 }
                 else {
@@ -216,16 +219,11 @@ const getInt = async () => {
             name: 'school',
             message: `Provide Intern's school`,
         }
-    ]);
-    let $intern = new Intern(result.name, result.id, result.email, result.school);
-    intern = $intern;
-    roles.push(intern)
-    getRole();
-    return intern 
+    ]).then(a => {
+        let newIntern = new Intern(a.name, a.id, a.email, a.school)
+        roles.push(newIntern)
+        getRole();
+    });
 };
-
-generateHTML = () => {
-    console.log(roles.Manager.map(x => x.name))
-}
 
 getManager();
